@@ -97,19 +97,19 @@ void initLCD(void)
 
     writeLCD(0x28,LCD_WRITE_CONTROL, 40);
 
-    // TODO: Display On/Off Control
+    
         // Turn Display (D) Off
     writeLCD(0x08,LCD_WRITE_CONTROL, 40);
 
-    // TODO: Clear Display (The delay is not specified in the data sheet at this point.
+    
     //You really need to have the clear display delay here.
     writeLCD(0x01,LCD_WRITE_CONTROL, 1640);
 
-    // TODO: Entry Mode Set
+    
         // Set Increment Display, No Shift (i.e. cursor move)
     writeLCD(0x06,LCD_WRITE_CONTROL, 40);
 
-// TODO: Display On/Off Control
+
   // Turn Display (D) On, Cursor (C) Off, and Blink(B) Off
     writeLCD(0x0C,LCD_WRITE_CONTROL, 40);
 }

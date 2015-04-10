@@ -23,8 +23,10 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 
 #define true 1   // define true to use with bool data type.
 #define false 0  // define false for bool data type.
+#define bool int // defines the boolean data type.
 
 #define PRESSED 0 //DOUBLE CHECK THIS it is for switch rb15
+#define RELEASED 1 // Define the released state of the switch.
 
 //Thresholds that come from what the sensors read based on their position
 //random three digit numbers assigned right now as place holders (will change)

@@ -8,7 +8,6 @@
 #include "p24FJ64GA002.h"
 #include "timer.h"
 
-    //TODO: Create a delay for "delay" micro seconds using timer 2
     void delayUs(unsigned int delay)
 {
     TMR2 = 0; //According to the datasheet this should be reset automatically, but it does not sometimes.

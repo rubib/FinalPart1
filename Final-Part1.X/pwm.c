@@ -43,6 +43,8 @@ void spinForward(){
     ODCBbits.ODB1 = 0;  // Pin 5
     RPOR0bits.RP1R = 18; // Pin 5
     ODCBbits.ODB2 = 1; // Pin 6
+    OC1RS = (unsigned int) (PR3); //for left. Full Speed.
+    // TODO: Check this line
 
     /*
      FOR RIGHT
@@ -51,6 +53,8 @@ void spinForward(){
     ODCBbits.ODB3 = 0;  // Pin 7
     RPOR1bits.RP3R = 19; // Pin 7
     ODCBbits.ODB4 = 1; // Pin 11
+    OC2RS = (unsigned int) (PR3); // for right. Full Speed.
+    // TODO: check this line
 
 }
 
