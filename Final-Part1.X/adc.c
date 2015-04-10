@@ -10,7 +10,12 @@
 
 void initADC(){
 
-    AD1PCFGbits.PCFG0 = 0;     //Set pin 2 to analog
+    //AD1PCFGbits.PCFG0 = 0;     //Set pin 2 to analog
+
+    AD1PCFGbits.PCFG10 = 0; // Configure pin 25 to analog
+    AD1PCFGbits.PCFG11 = 0; // Configure pin 24 to analog
+    AD1PCFGbits.PCFG12 = 0; // Configure pin 23 to analog
+
     AD1CON1bits.FORM = 0;      //Data Output Format bits set as integers
     AD1CON1bits.SSRC = 7;      //Conversion Trigger Source Select bits, Internal counter ends sampling and starts conversion (auto-convert)
     AD1CON1bits.ASAM = 1;      //sample automatically
@@ -24,6 +29,7 @@ void initADC(){
     AD1CHS = 0;                //Configure input channels,
     AD1CSSL = 0;               //Channel scanning is disabled anyway.
     AD1CON1bits.ADON = 1;      // Turn on A/D
+
 
     IEC0bits.AD1IE = 1;     //Enable the interrupt
     IFS0bits.AD1IF = 0;     //Put the flag down

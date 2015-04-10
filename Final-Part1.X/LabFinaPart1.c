@@ -28,12 +28,21 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 #define PRESSED 0 //DOUBLE CHECK THIS it is for switch rb15
 #define RELEASED 1 // Define the released state of the switch.
 
+#define black 0
+#define white 1
+
+
 //Thresholds that come from what the sensors read based on their position
 //random three digit numbers assigned right now as place holders (will change)
 //should serve as guides for the position of the car with respect to the line.
+#define changeThreshold 1000
 #define OnWhiteLeft_Sensor 230
 #define OnBlackMiddle_Sensor 250
 #define OnWhiteRight_Sensor 230
+
+//Pins used for the sensors:
+//left 23, middle 24, right 25
+//Rb 12-14
 
 typedef enum stateTypeEnum
 {
@@ -41,7 +50,7 @@ typedef enum stateTypeEnum
         forward,
         turnLeftState,
         turnRightState,
-        //turnAround,//Focus on following the line first
+        //turnAround, //TODO: Make the robot turn around 180 degrees
         wait,
 
 } stateType;
@@ -52,6 +61,9 @@ typedef enum stateTypeEnum
 //Waiting until the switch is pressed
 volatile stateType currState = wait;
 
+volatile int sensorLeft;
+volatile int sensorMiddle;
+volatile int sensorRight;
 
 
 int main(void) {
@@ -111,8 +123,44 @@ void _ISR _CNInterrupt(void) {
  */
 void _ISR _ADC1Interrupt(void){
     IFS0bits.AD1IF = 0;
-    //val = ADC1BUF0;
+    if(ADC1BUFA < changeThreshold){
+        sensorRight = black;
+    }
+    else {
+        sensorRight = white;
+    }
 
+    if(ADC1BUFB < changeThreshold){
+        sensorMiddle = black;
+    }
+    else {
+        sensorMiddle = white;
+    }
+
+    if(ADC1BUFC < changeThreshold){
+        sensorLeft = black;
+    }
+    else {
+        sensorLeft = white;
+    }
+
+
+//    sensorRight = ADC1BUFA;
+//    sensorMiddle = ADC1BUFB;
+//    sensorLeft = ADC1BUFC;
+
+
+    if(currState != wait){
+        if (sensorMiddle == black && sensorLeft == white && sensorRight == white){ //If we are looking at the black line
+            currState = forward;    //keep moving forward
+        }
+        else if (sensorLeft == white && sensorRight == black){
+            currState = turnRightState;
+        }
+        else if (sensorLeft == black && sensorRight == white){
+            currState = turnLeftState;
+        }
+    }
 
 
 }
