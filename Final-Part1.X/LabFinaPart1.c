@@ -96,6 +96,18 @@ void _ISR _CNInterrupt(void) {
          if (currState == wait){
             currState = forward;
          }
-        }
+         if (currState != wait){
+             currState = wait;
+         }
+     }
      
+}
+
+void _ISR _ADC1Interrupt(void){
+    IFS0bits.AD1IF = 0;
+    val = ADC1BUF0;
+
+    
+
+
 }
