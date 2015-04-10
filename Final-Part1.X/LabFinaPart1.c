@@ -37,8 +37,8 @@ typedef enum stateTypeEnum
 {
     // Define states by name
         forward,
-        turnLeft,
-        turnRight,
+        turnLeftState,
+        turnRightState,
         //turnAround,//Focus on following the line first
         wait,
 
@@ -73,10 +73,10 @@ int main(void) {
             case forward:
                 spinForward();
                 break;
-            case turnRight:
+            case turnRightState:
                 turnRight(); //change the function
                 break;
-            case turnLeft:
+            case turnLeftState:
                 turnLeft();  //change function
                 break;
 //            case turnAround:
@@ -103,11 +103,14 @@ void _ISR _CNInterrupt(void) {
      
 }
 
+/*
+    This interrupts is the one that "listens" the infrared sensors and decides which way to turn
+ depending on which sensors are picking up signals.
+ */
 void _ISR _ADC1Interrupt(void){
     IFS0bits.AD1IF = 0;
-    val = ADC1BUF0;
+    //val = ADC1BUF0;
 
-    
 
 
 }
