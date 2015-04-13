@@ -9,6 +9,10 @@
 #include "pwm.h"
 #include "timer.h"
 
+#define FULLSPEED (unsigned int) (PR3)
+#define STOP 0
+
+
 void initPWMLeft(){
 
     TMR3 = 0;
@@ -43,8 +47,8 @@ void spinForward(){
     ODCBbits.ODB1 = 0;  // Pin 5
     RPOR0bits.RP1R = 18; // Pin 5
     ODCBbits.ODB2 = 1; // Pin 6
-    OC1RS = (unsigned int) (PR3); //for left. Full Speed.
-    // TODO: Check this line
+    OC1RS = FULLSPEED; //for left. Full Speed.
+   
 
     /*
      FOR RIGHT
@@ -53,8 +57,8 @@ void spinForward(){
     ODCBbits.ODB3 = 0;  // Pin 7
     RPOR1bits.RP3R = 19; // Pin 7
     ODCBbits.ODB4 = 1; // Pin 11
-    OC2RS = (unsigned int) (PR3); // for right. Full Speed.
-    // TODO: check this line
+    OC2RS = FULLSPEED; // for right. Full Speed.
+    
 
 }
 
@@ -63,18 +67,12 @@ void turnRight(){
     /*
      FOR LEFT
      */
-    RPOR1bits.RP2R = 0;  // Sets Pin 6 PWM to NULL. This stops Pin 6 from using PWM
-    ODCBbits.ODB1 = 0;  // Pin 5
-    RPOR0bits.RP1R = 18; // Pin 5
-    ODCBbits.ODB2 = 1; // Pin 6
+    OC1RS = FULLSPEED; //for left. Full Speed.
 
     /*
      FOR RIGHT
      */
-    RPOR2bits.RP4R = 0; // Pin 11
-    ODCBbits.ODB3 = 0;  // Pin 7
-    RPOR1bits.RP3R = 19; // Pin 7
-    ODCBbits.ODB4 = 1; // Pin 11
+    OC2RS = STOP;
 
 }
 
@@ -82,20 +80,28 @@ void turnLeft(){
     /*
      FOR LEFT
      */
-    RPOR1bits.RP2R = 0;  // Sets Pin 6 PWM to NULL. This stops Pin 6 from using PWM
-    ODCBbits.ODB1 = 0;  // Pin 5
-    RPOR0bits.RP1R = 18; // Pin 5
-    ODCBbits.ODB2 = 1; // Pin 6
+    OC1RS = STOP
 
     /*
      FOR RIGHT
      */
-    RPOR2bits.RP4R = 0; // Pin 11
-    ODCBbits.ODB3 = 0;  // Pin 7
-    RPOR1bits.RP3R = 19; // Pin 7
-    ODCBbits.ODB4 = 1; // Pin 11
-
+    OC2RS = FULLSPEED; // for right. Full Speed.
 }
+
+void turnAround(){
+    /*
+     FOR LEFT
+     */
+    OC1RS = FULLSPEED;
+
+    /*
+     FOR RIGHT
+     */
+    OC2RS = FULLSPEED; // for right. Full Speed.
+}
+
+
+
 
 //NOT NECESSARY FOR LINE FOLLOWING ------------------------------------
 void spinBackward(){

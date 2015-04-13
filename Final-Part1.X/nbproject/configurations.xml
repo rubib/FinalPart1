@@ -9,7 +9,7 @@
       <itemPath>lcd.h</itemPath>
       <itemPath>pwm.h</itemPath>
       <itemPath>timer.h</itemPath>
-      <itemPath>/Applications/microchip/xc16/v1.24/support/PIC24F/h/p24FJ64GA002.h</itemPath>
+      <itemPath>../../../../../../Program Files (x86)/Microchip/xc16/v1.24/support/PIC24F/h/p24FJ64GA002.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -33,6 +33,8 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>/Applications/microchip/xc16/v1.24/support/PIC24F/h</Elem>
+    <Elem>../../../../../../Program Files (x86)/Microchip/xc16/v1.24/bin</Elem>
+    <Elem>../../../../../../Program Files (x86)/Microchip/xc16/v1.24/support/PIC24F/h</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
