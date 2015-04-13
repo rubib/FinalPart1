@@ -51,7 +51,7 @@ typedef enum stateTypeEnum
 
 
 //Waiting until the switch is pressed.
-volatile stateType currState = wait;
+volatile stateType currState;
 
 volatile int sensorLeft;
 volatile int sensorMiddle;
@@ -62,6 +62,7 @@ volatile int linesDetected = 0 ;
 
 int main(void) {
     //Initialize components
+    char v[3];
     initPWMLeft();
     initPWMRight();
     initADC();
@@ -69,15 +70,17 @@ int main(void) {
     initSW1();
     clearLCD();
 
+    sensorLeft= 1;
+    sensorMiddle= 0;
+    sensorRight= 1;
+
+    currState = wait;
 
     while (1){
        //Make the LCD display the reading from all three sensors.
-       moveCursorLCD(0,0);
-       printStringLCD((char) sensorLeft);
-       moveCursorLCD(0,1);
-       printStringLCD((char) sensorMiddle);
-       moveCursorLCD(0,2);
-       printStringLCD((char) sensorRight);
+        clearLCD();
+        sprintf(v, "%d %d %d" , sensorLeft, sensorMiddle, sensorRight);
+        printStringLCD(v);
        
        delayMs(10);
 
@@ -110,12 +113,15 @@ void _ISR _CNInterrupt(void) {
 //    delayMs(10);
 
      if(_RB5 == PRESSED){
-         if (currState == wait){
-            currState = forward;
-         }
+
          if (currState != wait){
              currState = wait;
          }
+
+         else if (currState == wait){
+            currState = forward;
+         }
+
      }
      
 }
@@ -149,7 +155,7 @@ void _ISR _ADC1Interrupt(void){
     else {
         sensorLeft = white;
     }
-    
+
 //-------------------------------------------------------------------------
 
 //    sensorRight = ADC1BUFA;
@@ -159,7 +165,7 @@ void _ISR _ADC1Interrupt(void){
 //Decide on state based on sensor reading. Right sensor has priority.---------
     if(currState != wait){
         //If the sensors are exactly on the line and outside the line.
-        if (sensorMiddle == black && sensorLeft == white && sensorRight == white){ 
+        if (sensorMiddle == black && sensorLeft == white && sensorRight == white){
             currState = forward;    //keep moving forward
         }
 
@@ -171,6 +177,11 @@ void _ISR _ADC1Interrupt(void){
             }
         }
          */
+
+        //if there is no line keep turning right until the line is found.
+        else if (sensorLeft == white && sensorRight == white && sensorMiddle == white){
+            currState = turnRightState;
+        }
 
         //If the sensor on the right detects a curve.
         else if (sensorLeft == white && sensorRight == black){

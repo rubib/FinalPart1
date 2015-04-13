@@ -47,8 +47,7 @@ void spinForward(){
     ODCBbits.ODB1 = 0;  // Pin 5
     RPOR0bits.RP1R = 18; // Pin 5
     ODCBbits.ODB2 = 1; // Pin 6
-    OC1RS = FULLSPEED; //for left. Full Speed.
-   
+    OC1RS = FULLSPEED;
 
     /*
      FOR RIGHT
@@ -57,8 +56,7 @@ void spinForward(){
     ODCBbits.ODB3 = 0;  // Pin 7
     RPOR1bits.RP3R = 19; // Pin 7
     ODCBbits.ODB4 = 1; // Pin 11
-    OC2RS = FULLSPEED; // for right. Full Speed.
-    
+    OC2RS = FULLSPEED;
 
 }
 
@@ -80,7 +78,7 @@ void turnLeft(){
     /*
      FOR LEFT
      */
-    OC1RS = STOP
+    OC1RS = STOP;
 
     /*
      FOR RIGHT
