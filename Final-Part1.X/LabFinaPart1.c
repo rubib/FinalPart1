@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   LabFinaPart1.c
  * Author: Rubi Ballesteros
  *
@@ -31,7 +31,8 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
 #define black 0
 #define white 1
 
-#define changeThreshold 1000 //The threshold at which the black line is detected
+#define changeThreshold 200 //The threshold at which the black line is detected
+#define RightChangeThreshold  200
 
 //Pins used for the sensors:
 //left 23, middle 24, right 25
@@ -44,7 +45,7 @@ typedef enum stateTypeEnum
         turnLeftState,
         turnRightState,
         //TODO: Make the robot turn around 180 degrees
-        //turnAround, 
+        //turnAround,
         wait,
 
 } stateType;
@@ -53,36 +54,47 @@ typedef enum stateTypeEnum
 //Waiting until the switch is pressed.
 volatile stateType currState;
 
+volatile int sensorLeftReading;
+volatile int sensorMiddleReading;
+volatile int sensorRightReading;
+
 volatile int sensorLeft;
 volatile int sensorMiddle;
 volatile int sensorRight;
+
+
 
 volatile int linesDetected = 0 ;
 
 
 int main(void) {
     //Initialize components
-    char v[3];
+    //char v[3];
     initPWMLeft();
     initPWMRight();
     initADC();
-    initLCD();
+   // initLCD();
     initSW1();
-    clearLCD();
+   // clearLCD();
 
-    sensorLeft= 1;
-    sensorMiddle= 0;
-    sensorRight= 1;
+//   sensorLeft = 1;
+//   sensorMiddle = 0;
+//   sensorRight= 1;
 
     currState = wait;
 
     while (1){
        //Make the LCD display the reading from all three sensors.
-        clearLCD();
-        sprintf(v, "%d %d %d" , sensorLeft, sensorMiddle, sensorRight);
-        printStringLCD(v);
-       
-       delayMs(10);
+//        clearLCD();
+//        sprintf(v, "%d %d %d" , sensorLeft, sensorMiddle, sensorRight);
+//        printStringLCD(v);
+
+//       delayMs(10);
+          sensorRightReading = rightSensorADC();
+          sensorMiddleReading = middleSensorADC();
+          sensorLeftReading = leftSensorADC();
+
+
 
        //Case Statement: FSM
        switch (currState){
@@ -90,7 +102,8 @@ int main(void) {
                 idleFunction();
                 break;
             case forward:
-                spinForward();
+               spinForward();
+                //turnRight();
                 break;
             case turnRightState:
                 turnRight(); //change the function
@@ -123,7 +136,7 @@ void _ISR _CNInterrupt(void) {
          }
 
      }
-     
+
 }
 
 /*
@@ -135,21 +148,21 @@ void _ISR _ADC1Interrupt(void){
 
  //Set threshold to turn readings from ADC buffer into a 0 or 1-------------
 
-    if(ADC1BUFA < changeThreshold){ //Buffer of pin 25
+    if(sensorRightReading < RightChangeThreshold){ //Buffer of pin 25
         sensorRight = black;
     }
     else {
         sensorRight = white;
     }
 
-    if(ADC1BUFB < changeThreshold){ //Buffer of pin 24
+    if(sensorMiddleReading < changeThreshold){ //Buffer of pin 24
         sensorMiddle = black;
     }
     else {
         sensorMiddle = white;
     }
 
-    if(ADC1BUFC < changeThreshold){ //Buffer of pin 23
+    if(sensorLeftReading < changeThreshold){ //Buffer of pin 23
         sensorLeft = black;
     }
     else {
@@ -167,6 +180,13 @@ void _ISR _ADC1Interrupt(void){
         //If the sensors are exactly on the line and outside the line.
         if (sensorMiddle == black && sensorLeft == white && sensorRight == white){
             currState = forward;    //keep moving forward
+        }
+
+        else if(sensorMiddle == black && sensorLeft == black && sensorRight == black){
+          linesDetected++;
+            if (linesDetected == 3){
+                currState = turnRightState;
+           }
         }
 
         /*TODO: Threshold check for 180 turn
@@ -192,7 +212,7 @@ void _ISR _ADC1Interrupt(void){
             currState = turnLeftState;
         }
 
-    }
+   }
 //----------------------------------------------------------------------------
 
 }

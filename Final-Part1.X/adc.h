@@ -9,5 +9,9 @@
 #define	ADC_H
 
 void initADC();
+int leftSensorADC();
+int middleSensorADC();
+int rightSensorADC();
+
 
 #endif	/* ADC_H */
